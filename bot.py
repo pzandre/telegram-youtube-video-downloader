@@ -48,8 +48,11 @@ def download(update, context):
     """Process the URL to return the video file"""
     URL = update.message.text
     video = YouTube(URL)
-    video_streams = video.streams.filter(file_extension='mp4').get_by_itag(22)
-    filename = slugify(video_streams.title)
+    video_streams = video.streams.filter(file_extension='mp4').get_by_itag(397)
+    try:
+        filename = slugify(video_streams.title)
+    except Exception as e:
+        return f"[YOUTUBE ERROR]: {e}! Ask Andre to save me!"
     video_streams.download(filename=filename)
     context.bot.send_video(chat_id=update.message.chat_id,
                            video=open(f'{filename}.mp4', 'rb'),
